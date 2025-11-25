@@ -1,0 +1,6 @@
+# Padrão: todo texto com final de linha LF
+* text eol=lf
+
+# (Opcional) se um dia tiver scripts Windows:
+#*.bat text eol=crlf
+#*.ps1 text eol=crlf
