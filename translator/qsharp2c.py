@@ -1,68 +1,102 @@
-#!/usr/bin/env python3
-"""
-qsharp2c.py  —  Protótipo mínimo (MVP) de tradutor Q# -> C simbólico para ESBMC.
-
-Nova versão simplificada:
-- NÃO depende mais de comentários especiais "Região traduzível".
-- Conta todas as ocorrências de `X(q);` no arquivo .qs.
-- Gera um harness C que aplica a mesma quantidade de toggles em um bool.
-
-Uso:
-  python3 translator/qsharp2c.py qsharp/TestXXIdentity.qs build/generated_toggle.c
-  esbmc build/generated_toggle.c --unwind 1
-"""
-
-import sys
 import re
+import sys
 import os
-import pathlib
 
+class QSharpToCHarness:
+    def __init__(self):
+        # Cabeçalho do Harness C com suporte a amplitudes complexas e estabilidade
+        self.c_template_header = """
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
 
-def count_x_ops(source: str) -> int:
-    # Conta linhas que tenham "X(q);" (com espaços opcionais)
-    pattern = r'^\s*X\s*\(\s*q\s*\)\s*;'
-    return len(re.findall(pattern, source, flags=re.M))
+// Estruturas para o Modelo Intermediário (Intermediate Model)
+typedef struct { double real; double imag; } complex_t;
+typedef struct { complex_t alpha; complex_t beta; } qubit_t;
 
+// Propriedade Φ: Verificador de Estabilidade Numérica (Overflow/Underflow)
+void check_stability(qubit_t q) {
+    double norm_sq = (q.alpha.real * q.alpha.real + q.alpha.imag * q.alpha.imag) +
+                     (q.beta.real * q.beta.real + q.beta.imag * q.beta.imag);
+    
+    // Verifica se a precisão digital manteve a unitariedade física
+    __ESBMC_assert(norm_sq >= 0.999 && norm_sq <= 1.001, "ERRO: Instabilidade Numérica detectada");
+}
 
-def render_c(num_ops: int) -> str:
-    tpl_path = pathlib.Path(__file__).parent / "templates" / "C_HARNESS_TEMPLATE.c"
-    template = tpl_path.read_text(encoding="utf-8")
+// Implementação dos Operadores Unitários (Transições T)
+qubit_t apply_X(qubit_t q) {
+    qubit_t res = { q.beta, q.alpha }; 
+    return res;
+}
 
-    # Gera N linhas "q = !q;"
-    ops_c = "\n  ".join(["q = !q;" for _ in range(num_ops)])
+// Expansão futura para o Grupo de Clifford (Sprint 3)
+// qubit_t apply_H(qubit_t q) { ... }
 
-    c = template.replace(
-        "/* {{OPERACOES_EM_C}} */",
-        "_Bool __INITIAL_Q__ = q;\n  " + ops_c,
-    )
+int main() {
+    // Inicialização Simbólica (Exploração exaustiva k=1)
+    qubit_t q;
+    q.alpha.real = __VERIFIER_nondet_double();
+    q.alpha.imag = 0.0;
+    q.beta.real = __VERIFIER_nondet_double();
+    q.beta.imag = 0.0;
 
-    return c
+    // Pré-condição: Estado deve ser fisicamente admissível
+    double init_norm = (q.alpha.real * q.alpha.real) + (q.beta.real * q.beta.real);
+    __ESBMC_assume(init_norm >= 0.999 && init_norm <= 1.001);
+    
+    complex_t initial_state = q.alpha;
+"""
+        self.c_template_footer = """
+    return 0;
+}
+"""
 
+    def translate(self, qsharp_code):
+        c_body = ""
+        # Regex simples para identificar o subconjunto determinístico atual {X, fail} [1]
+        lines = qsharp_code.split('\\n')
+        for line in lines:
+            line = line.strip()
+            
+            # Mapeamento da Porta Pauli-X com injeção de estabilidade
+            if re.match(r'X\\(.*?\\);', line):
+                c_body += "    q = apply_X(q);\\n"
+                c_body += "    check_stability(q); // Propriedade de Estabilidade Numérica\\n"
+            
+            # Mapeamento do Fallback/Fail para Asserção Formal
+            elif "fail" in line:
+                error_msg = re.search(r'fail "(.*?)";', line)
+                msg = error_msg.group(1) if error_msg else "Violation"
+                c_body += f'    __ESBMC_assert(false, "{msg}");\\n'
+                
+            # Mapeamento de Identidade (Check final de reversibilidade)
+            elif "M(q) != initial" in line or "Quantum identity violated" in line:
+                c_body += "    __ESBMC_assert(q.alpha.real == initial_state.real, \"Quantum identity violated\");\\n"
+
+        return self.c_template_header + c_body + self.c_template_footer
 
 def main():
-    if len(sys.argv) != 3:
-        print("Uso: python3 translator/qsharp2c.py <input.qs> <output.c>")
-        sys.exit(2)
+    if len(sys.argv) < 3:
+        print("Uso: python3 qsharp2c.py <input.qs> <output.c>")
+        return
 
-    inp, out = sys.argv[1], sys.argv[2]
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
-    with open(inp, encoding="utf-8") as f:
-        src = f.read()
+    if not os.path.exists(input_file):
+        print(f"Erro: Arquivo {input_file} não encontrado.")
+        return
 
-    n_x = count_x_ops(src)
-    if n_x == 0:
-        print("Aviso: não encontrei nenhuma linha 'X(q);' no arquivo Q#. Gerando harness vazio.")
-    else:
-        print(f"Encontradas {n_x} ocorrências de X(q);")
+    with open(input_file, 'r') as f:
+        qsharp_code = f.read()
 
-    c_code = render_c(n_x)
+    translator = QSharpToCHarness()
+    c_code = translator.translate(qsharp_code)
 
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    with open(out, "w", encoding="utf-8") as f:
+    with open(output_file, 'w') as f:
         f.write(c_code)
 
-    print(f"[ok] Gerado: {out}")
-
+    print(f"Sucesso! Intermediate Model gerado em: {output_file}")
 
 if __name__ == "__main__":
     main()
