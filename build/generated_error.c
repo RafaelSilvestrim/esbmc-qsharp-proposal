@@ -31,6 +31,15 @@ qubit_state_t apply_H(qubit_state_t q) {
     return next;
 }
 
+qubit_state_t apply_S(qubit_state_t q) {
+    qubit_state_t next = q;
+    // Porta S: multiplica beta por i (real -> -imag, imag -> real)
+    double temp_real = q.beta.real;
+    next.beta.real = -q.beta.imag;
+    next.beta.imag = temp_real;
+    return next;
+}
+
 int main() {
     qubit_state_t q;
     /* Estado Inicial Fixo: |0> puro */
@@ -41,7 +50,8 @@ int main() {
 
     /* === INÍCIO DA LÓGICA QUÂNTICA TRADUZIDA === */
       q = apply_X(q); check_stability(q);
-  q = apply_X(q); check_stability(q);
+  q = apply_S(q); check_stability(q);
+  q = apply_S(q); check_stability(q);
     /* === FIM DA LÓGICA QUÂNTICA TRADUZIDA === */
 
     /* Verificação Formal Final (Com tolerância epsilon de 0.001) */

@@ -40,8 +40,8 @@ int main() {
     qubit_state_t initial_q = q;
 
     /* === INÍCIO DA LÓGICA QUÂNTICA TRADUZIDA === */
-      q = apply_X(q); check_stability(q);
-  q = apply_X(q); check_stability(q);
+      q = apply_H(q); check_stability(q);
+  q = apply_H(q); check_stability(q);
     /* === FIM DA LÓGICA QUÂNTICA TRADUZIDA === */
 
     /* Verificação Formal Final (Com tolerância epsilon de 0.001) */
