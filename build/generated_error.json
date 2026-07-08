@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "SoftwareSourceCode",
+  "artifactName": "TestSIdentity.qs",
+  "targetHarness": "generated_error.c",
+  "transpilerVersion": "qsharp2c.py v1.2",
+  "quantumConfiguration": {
+    "qubitsAllocated": 1,
+    "hilbertSpaceDimension": "C^2"
+  },
+  "governanceMetadata": {
+    "pipelineStage": "Pre-Execution VBE Transpilation",
+    "timestamp": "2026-07-07T22:22:13.004926+00:00",
+    "injectedProperties": [
+      "Physical Unitarity",
+      "Functional Equivalence",
+      "Phase Phase-Shift"
+    ],
+    "requiredVerificationEngine": "ESBMC-Q# v7.9.0",
+    "recommendedSolverTheory": "floatbv (IEEE-754)"
+  },
+  "complianceAction": "PENDING_SMT_VERIFICATION"
+}

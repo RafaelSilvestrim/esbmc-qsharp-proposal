@@ -40,6 +40,16 @@ qubit_state_t apply_S(qubit_state_t q) {
     return next;
 }
 
+qubit_state_t apply_T(qubit_state_t q) {
+    qubit_state_t next = q;
+    // Porta T: multiplica beta por (1/sqrt(2) + i/sqrt(2))
+    double temp_real = q.beta.real;
+    double temp_imag = q.beta.imag;
+    next.beta.real = (temp_real * INV_SQRT2) - (temp_imag * INV_SQRT2);
+    next.beta.imag = (temp_real * INV_SQRT2) + (temp_imag * INV_SQRT2);
+    return next;
+}
+
 int main() {
     qubit_state_t q;
     /* Estado Inicial Fixo: |0> puro */
