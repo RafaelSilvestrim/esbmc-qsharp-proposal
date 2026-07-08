@@ -1,0 +1,33 @@
+{
+  "@context": "https://w3id.org/security/v2",
+  "@type": "VerificationRecord",
+  "circuit_id": "TestTGate",
+  "artifact": "TestTGate.qs",
+  "pipeline": {
+    "transpiler": "qsharp2c.py v2.0",
+    "verifier": "ESBMC 8.4.0 64-bit aarch64 macos",
+    "solver": "Z3 v4.16.0",
+    "flags": "--unwind 16 --z3"
+  },
+  "property": "equiv_hs",
+  "amplitude_encoding": "exact",
+  "qubits": 1,
+  "circuit_depth": 3,
+  "bound_k": 4,
+  "verdict": "UNSAT",
+  "governance_decision": "PROMOTE",
+  "metrics": {
+    "vccs": 6,
+    "solver_time_s": 0.003,
+    "bmc_time_s": 0.02,
+    "wall_time_s": 0.134
+  },
+  "timestamp": "2026-07-08T05:16:58+00:00",
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-07-08T05:16:58+00:00",
+    "verificationMethod": "did:key:z-lab-esbmc-qsharp#730c8f6f4329d045",
+    "publicKeyHex": "730c8f6f4329d045d6903efdfb2b2ffe0a416455f2f42ad872bcee5d6efd7a8b",
+    "signatureHex": "715b45524cd51996b7e1e8ea929ed131a6b0a54606822441175afa2827ac705ce74dc19603a32b36c5c062d7f598a19d17b1c0100a433fac6cd66b3f9b809d00"
+  }
+}

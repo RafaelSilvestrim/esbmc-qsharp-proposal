@@ -1,24 +1,24 @@
 {
   "@context": "https://schema.org/",
   "@type": "SoftwareSourceCode",
-  "artifactName": "TestSIdentity.qs",
-  "targetHarness": "TestSIdentity.c",
+  "artifactName": "TestTGate.qs",
+  "targetHarness": "TestTGate_exact.c",
   "transpilerVersion": "qsharp2c.py v2.0",
   "quantumConfiguration": {
     "qubitsAllocated": 1,
     "hilbertSpaceDimension": "C^2",
-    "circuitDepth": 2,
-    "boundK": 3
+    "circuitDepth": 3,
+    "boundK": 4
   },
   "verification": {
-    "amplitudeEncoding": "float",
-    "property": "identity",
-    "propertyDescription": "Functional equivalence (final state = reference state)",
-    "esbmcFlags": "--unwind 1 --z3 --floatbv"
+    "amplitudeEncoding": "exact",
+    "property": "equiv_hs",
+    "propertyDescription": "Non-Clifford equivalence (H.T.T = H.S on |0>)",
+    "esbmcFlags": "--unwind 16 --z3"
   },
   "governanceMetadata": {
     "pipelineStage": "E2: Pre-Execution VBE Transpilation",
-    "timestamp": "2026-07-08T05:16:57.923272+00:00"
+    "timestamp": "2026-07-08T05:16:58.537393+00:00"
   },
   "complianceAction": "PENDING_SMT_VERIFICATION"
 }

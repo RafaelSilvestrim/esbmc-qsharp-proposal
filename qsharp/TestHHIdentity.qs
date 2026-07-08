@@ -1,13 +1,14 @@
+// Experiment 2a — identity H.H = I on |0>.
+// @property: identity
 namespace QuantumFormalVerification {
     open Microsoft.Quantum.Intrinsic;
 
     operation TestHHIdentity() : Unit {
         use q = Qubit();
-        
-        // H * H = I
+
         H(q);
         H(q);
-        
-        // r = M(q); reset q;
+
+        let r = M(q);
     }
 }

@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz
+main.pdf
+
+# Private signing key (public key and signed records are tracked)
+governance/keys/vbe_signing_key.hex

@@ -1,0 +1,34 @@
+{
+  "@context": "https://w3id.org/security/v2",
+  "@type": "VerificationRecord",
+  "circuit_id": "TestSIdentity",
+  "artifact": "TestSIdentity.qs",
+  "pipeline": {
+    "transpiler": "qsharp2c.py v2.0",
+    "verifier": "ESBMC 8.4.0 64-bit aarch64 macos",
+    "solver": "Z3 v4.16.0",
+    "flags": "--unwind 1 --z3 --floatbv"
+  },
+  "property": "identity",
+  "amplitude_encoding": "float",
+  "qubits": 1,
+  "circuit_depth": 2,
+  "bound_k": 3,
+  "verdict": "SAT",
+  "governance_decision": "BLOCK",
+  "metrics": {
+    "vccs": 5,
+    "solver_time_s": 0.003,
+    "bmc_time_s": null,
+    "wall_time_s": 0.179
+  },
+  "timestamp": "2026-07-08T05:16:58+00:00",
+  "counterexample": "Violated property:\n  file build/TestSIdentity.c line 102 column 5 function main\n  functional equivalence: beta (|1>) amplitude diverges\n  tmp$6",
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-07-08T05:16:58+00:00",
+    "verificationMethod": "did:key:z-lab-esbmc-qsharp#730c8f6f4329d045",
+    "publicKeyHex": "730c8f6f4329d045d6903efdfb2b2ffe0a416455f2f42ad872bcee5d6efd7a8b",
+    "signatureHex": "e1222034ae7e136d0b54f014833445d263e3153fc0461fa3ca08fa0db7e221bf27562e4bc49ab5a0077cdff3b5fc685568cc95cafcb50237bf5690467e912800"
+  }
+}

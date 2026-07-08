@@ -1,0 +1,33 @@
+{
+  "@context": "https://w3id.org/security/v2",
+  "@type": "VerificationRecord",
+  "circuit_id": "TestBellState",
+  "artifact": "TestBellState.qs",
+  "pipeline": {
+    "transpiler": "qsharp2c.py v2.0",
+    "verifier": "ESBMC 8.4.0 64-bit aarch64 macos",
+    "solver": "Z3 v4.16.0",
+    "flags": "--unwind 1 --z3 --floatbv"
+  },
+  "property": "bell",
+  "amplitude_encoding": "float",
+  "qubits": 2,
+  "circuit_depth": 2,
+  "bound_k": 3,
+  "verdict": "UNSAT",
+  "governance_decision": "PROMOTE",
+  "metrics": {
+    "vccs": 3,
+    "solver_time_s": 0.001,
+    "bmc_time_s": 0.007,
+    "wall_time_s": 0.181
+  },
+  "timestamp": "2026-07-08T05:16:57+00:00",
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-07-08T05:16:57+00:00",
+    "verificationMethod": "did:key:z-lab-esbmc-qsharp#730c8f6f4329d045",
+    "publicKeyHex": "730c8f6f4329d045d6903efdfb2b2ffe0a416455f2f42ad872bcee5d6efd7a8b",
+    "signatureHex": "deb73dabe72dcb69307e871c0e58f908c866ac17c7f8ba4cd262acb3da40d748feb7f477ea834c86b2f52e352c4eb1e9cb6452d2b746ab1c8ee243ec03c1060b"
+  }
+}

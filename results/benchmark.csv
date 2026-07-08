@@ -1,0 +1,11 @@
+regime,qubits,states,gates_k,verdict,vccs,solver_time_s,wall_time_s
+func,2,4,2,UNSAT,1,0.0,0.119
+func,4,16,4,UNSAT,1,0.0,0.144
+func,6,64,6,UNSAT,4,0.0,0.271
+func,8,256,8,UNSAT,16,0.0,1.532
+func,10,1024,10,UNSAT,64,0.0,23.082
+func,12,4096,12,TIMEOUT,,,300.0
+basis,2,4,4,UNSAT,1,11.858,12.002
+basis,4,16,8,TIMEOUT,,,300.0
+unit,1,2,1,TIMEOUT,,,300.0
+ident,1,2,2,TIMEOUT,,,300.0

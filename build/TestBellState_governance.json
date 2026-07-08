@@ -1,24 +1,24 @@
 {
   "@context": "https://schema.org/",
   "@type": "SoftwareSourceCode",
-  "artifactName": "TestSIdentity.qs",
-  "targetHarness": "TestSIdentity.c",
+  "artifactName": "TestBellState.qs",
+  "targetHarness": "TestBellState.c",
   "transpilerVersion": "qsharp2c.py v2.0",
   "quantumConfiguration": {
-    "qubitsAllocated": 1,
-    "hilbertSpaceDimension": "C^2",
+    "qubitsAllocated": 2,
+    "hilbertSpaceDimension": "C^4",
     "circuitDepth": 2,
     "boundK": 3
   },
   "verification": {
     "amplitudeEncoding": "float",
-    "property": "identity",
-    "propertyDescription": "Functional equivalence (final state = reference state)",
+    "property": "bell",
+    "propertyDescription": "Bell fidelity (target amplitudes of (|00>+|11>)/sqrt(2))",
     "esbmcFlags": "--unwind 1 --z3 --floatbv"
   },
   "governanceMetadata": {
     "pipelineStage": "E2: Pre-Execution VBE Transpilation",
-    "timestamp": "2026-07-08T05:16:57.923272+00:00"
+    "timestamp": "2026-07-08T05:16:57.716762+00:00"
   },
   "complianceAction": "PENDING_SMT_VERIFICATION"
 }
